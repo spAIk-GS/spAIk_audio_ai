@@ -41,7 +41,7 @@ def convert_rms_to_db(rms_value):
         return -120.0
     return 20 * math.log10(rms_value)
 
-@app.route('/analyze_video', methods=['POST'])
+@app.route('/analysis/audio', methods=['POST'])
 def analyze_video_api():
     """
     POST 요청으로 비디오 파일을 받아 AI 면접 피드백을 생성하는 API 엔드포인트입니다.
