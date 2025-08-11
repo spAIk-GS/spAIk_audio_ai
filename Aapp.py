@@ -106,8 +106,6 @@ def download_video(s3_url, output_path):
 def process_audio(s3_url, analysis_id, presentation_id, callback_url):
     set_status(analysis_id, "IN_PROGRESS")
 
-    print(f"[{analysis_id}] video_path: {video_path}")
-
     with tempfile.TemporaryDirectory(prefix="dl_") as tmpdir:
         video_path = os.path.join(tmpdir, f"{analysis_id}.mp4")
 
