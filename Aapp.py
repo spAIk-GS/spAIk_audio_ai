@@ -148,7 +148,7 @@ def process_audio(s3_url, analysis_id, presentation_id, callback_url):
             notify_status(callback_url, fail_payload)
             return
 
-@app.route('/analyze/audio', methods=['POST'])
+@app.route('/analysis/audio', methods=['POST'])
 def analyze_video():
     data = request.get_json()
     presentation_id = data.get("presentationId")
