@@ -57,6 +57,7 @@ def amain(video_path, analysis_id, presentation_id):
         audio_path = os.path.join(tmpdir, f"{presentation_id}.wav")
         start = time.time()
         # 2) 비디오 → 오디오 추출 (임시파일에 저장)
+        print("--추출 시작--")
         extract_audio_from_video(video_path, audio_path)
         end = time.time()
         print(f"[✓] 소요 시간: {end - start:.2f}초")
@@ -134,4 +135,5 @@ if __name__ == "__main__":
     start_total = time.time()
     amain()
     print(f"\n총 소요 시간: {time.time() - start_total:.2f}초")
+
 
