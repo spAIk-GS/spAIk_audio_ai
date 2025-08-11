@@ -104,6 +104,8 @@ def download_video(s3_url, output_path):
         return False
 
 def process_audio(s3_url, analysis_id, presentation_id, callback_url):
+    """Download video from s3_url, run audio analysis, and send result or failure callback."""
+
     set_status(analysis_id, "IN_PROGRESS")
 
     with tempfile.TemporaryDirectory(prefix="dl_") as tmpdir:
@@ -114,35 +116,43 @@ def process_audio(s3_url, analysis_id, presentation_id, callback_url):
             set_status(analysis_id, "FAILED")
             fail_payload = {
                 "analysisId": analysis_id,
-                "videoId": presentation_id,  # URL에서 추출한 id 사용
-                # result 없음
+                "videoId": presentation_id,
+                "status": "FAILED",
+                "message": "Download failed"
             }
             notify_status(callback_url, fail_payload)
             return
 
         try:
-            # 2) 분석 실행 (audiomain.main이 dict 반환)
+            # 2) 분석 실행
             result_data = audiomain.amain(video_path, analysis_id, presentation_id)
             if not isinstance(result_data, dict):
-                raise ValueError("mainVideo.run 결과 형식이 dict가 아닙니다.")
+                raise ValueError("amain() 결과 형식이 dict가 아닙니다.")
 
-            # 3) 완료 통지: 최종 payload 조립 (presentationId/status는 빼는 조건)
+            # 3) 완료 통지
             final_payload = {
                 "analysisId": analysis_id,
                 "videoId": presentation_id,
+                "status": "COMPLETED",
                 "result": result_data
             }
 
             set_status(analysis_id, "COMPLETED")
-
             notify_status(callback_url, final_payload)
 
         except Exception as e:
+            # 예외 전체 스택 추적과 메시지를 함께 출력
+            err_trace = traceback.format_exc()
             print(f"[분석 실패] {e}")
+            print(err_trace)
+
             set_status(analysis_id, "FAILED")
+
             fail_payload = {
                 "analysisId": analysis_id,
                 "videoId": presentation_id,
+                "status": "FAILED",
+                "message": f"{str(e)}\n\n{err_trace}"[:4000]  # 콜백에도 원인 포함
             }
             notify_status(callback_url, fail_payload)
             return
