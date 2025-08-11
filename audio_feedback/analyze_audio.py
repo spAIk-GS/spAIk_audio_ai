@@ -8,6 +8,9 @@ import subprocess
 
 
 def analyze_audio_features(audio_path):
+    if not os.path.exists(audio_path):
+        raise FileNotFoundError(f"Audio file not found: {audio_path}")
+
     y, sr = librosa.load(audio_path, sr=16000)
 
     # 1. 기존: 오디오 길이 계산
