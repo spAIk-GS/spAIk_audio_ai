@@ -9,6 +9,7 @@ import threading
 import time
 from tqdm import tqdm
 import tempfile
+import traceback
 
 
 app = Flask(__name__)
