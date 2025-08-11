@@ -109,8 +109,6 @@ def process_audio(s3_url, analysis_id, presentation_id, callback_url):
     with tempfile.TemporaryDirectory(prefix="dl_") as tmpdir:
         video_path = os.path.join(tmpdir, f"{analysis_id}.mp4")
 
-        print(f"[{analysis_id}] video_path: {video_path}") #추가
-
         # 1) 다운로드
         if not download_video(s3_url, video_path):
             set_status(analysis_id, "FAILED")
@@ -121,12 +119,6 @@ def process_audio(s3_url, analysis_id, presentation_id, callback_url):
             }
             notify_status(callback_url, fail_payload)
             return
-            
-        #추가
-        import os
-        exists = os.path.exists(video_path)
-        size = os.path.getsize(video_path) if exists else 0
-        print(f"[{analysis_id}] video exists? {exists}, size={size} bytes")
 
         try:
             # 2) 분석 실행 (audiomain.main이 dict 반환)
