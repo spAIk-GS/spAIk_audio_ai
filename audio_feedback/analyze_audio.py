@@ -3,6 +3,9 @@ import librosa
 import numpy as np
 from audio_feedback.speaking_rate import calculate_speaking_rate
 from audio_feedback.asr_whisper import transcribe_audio
+import os
+import subprocess
+
 
 def analyze_audio_features(audio_path):
     y, sr = librosa.load(audio_path, sr=16000)
@@ -34,3 +37,18 @@ def analyze_audio_features(audio_path):
         "avg_pitch_hz": avg_pitch,
         "avg_rms": rms
     }
+
+def extract_audio(video_path, audio_path, sr=16000):
+    os.makedirs(os.path.dirname(audio_path), exist_ok=True)
+
+    cmd = [
+        "ffmpeg", "-y", "-i", video_path,
+        "-vn", "-ac", "1", "-ar", str(sr),
+        "-loglevel", "error", audio_path
+    ]
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    if proc.returncode != 0 or not os.path.exists(audio_path):
+        raise RuntimeError(f"FFmpeg failed: {proc.stderr.strip()}")
+
+    return audio_path
