@@ -137,6 +137,8 @@ def process_audio(s3_url, analysis_id, presentation_id, callback_url):
                 "status": "COMPLETED",
                 "result": result_data
             }
+            
+            print(final_payload)
 
             set_status(analysis_id, "COMPLETED")
             notify_status(callback_url, final_payload)
