@@ -13,9 +13,6 @@ from audio_feedback.stuttering_detector import detect_stuttering
 # It is assumed that generate_audio_feedback now takes `features` and `avg_rms_db` as arguments.
 from audio_feedback.feedback_generator import generate_audio_feedback
 
-# Import Gemini text feedback generation module
-from answer_feedback.ai_feedback import generate_feedback_no_question
-
 # === JSON file saving related functions ===
 
 def save_feedback_to_json(feedback_data: dict, filename: str):
@@ -92,13 +89,6 @@ def amain(video_path, analysis_id, presentation_id):
         # 수정된 generate_audio_feedback 함수를 호출하고, 점수와 피드백을 한 번에 받습니다.
         audio_feedback_results = generate_audio_feedback(features, avg_rms_db)
         
-        # === 6. Gemini text feedback generation ===
-        print("=== 5. Gemini 텍스트 피드백 생성 중 ===")
-        if transcript.strip():
-            text_feedback = generate_feedback_no_question(transcript)
-        else:
-            text_feedback = "답변 텍스트가 없어 Gemini 피드백을 생성하지 않습니다."
-        
         # === 7. Final feedback generation ===
         print("\n========== 최종 피드백을 생성 중 ==========")
     
@@ -124,7 +114,7 @@ def amain(video_path, analysis_id, presentation_id):
                 "feedback": stutter_feedback,
                 "stutter_count": stutter_count
             },
-            "content_summary": text_feedback
+           
         }
         print(final_feedback_report)
         return final_feedback_report
