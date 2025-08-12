@@ -126,7 +126,7 @@ def amain(video_path, analysis_id, presentation_id):
             },
             "content_summary": text_feedback
         }
-        
+        print(final_feedback_report)
         return final_feedback_report
     
 
@@ -135,5 +135,3 @@ if __name__ == "__main__":
     start_total = time.time()
     amain()
     print(f"\n총 소요 시간: {time.time() - start_total:.2f}초")
-
-
