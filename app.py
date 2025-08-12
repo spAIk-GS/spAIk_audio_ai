@@ -13,8 +13,6 @@ from audio_feedback.analyze_audio import analyze_audio_features
 from audio_feedback.stuttering_detector import detect_stuttering
 from audio_feedback.feedback_generator import generate_audio_feedback
 
-# Gemini 텍스트 피드백 생성 모듈 임포트 (예상 경로)
-from answer_feedback.ai_feedback import generate_feedback_no_question
 
 app = Flask(__name__)
 
@@ -95,13 +93,7 @@ def analyze_video_api():
         
         audio_feedback_results = generate_audio_feedback(features, avg_rms_db)
         
-        # 7. Gemini 모델을 사용하여 텍스트 답변 내용에 대한 피드백을 생성합니다.
-        if transcript.strip():
-            text_feedback = generate_feedback_no_question(transcript)
-        else:
-            text_feedback = "답변 텍스트가 없어 Gemini 피드백을 생성하지 않습니다."
-        
-        # 8. 최종 분석 결과를 JSON 형식에 맞춰 재구성합니다.
+        # 7. 최종 분석 결과를 JSON 형식에 맞춰 재구성합니다.
         final_feedback = {
             "analysisId": generate_analysis_id(video_id, "full_report"),
             "videoId": video_id,
@@ -122,7 +114,6 @@ def analyze_video_api():
                     "feedback": stuttering_analysis_results.get('stuttering_feedback', 'N/A'),
                     "stutter_count": stuttering_analysis_results.get('stutter_count', 0)
                 },
-                "content_summary": text_feedback
             }
         }
 

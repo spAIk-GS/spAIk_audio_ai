@@ -28,17 +28,6 @@ matplotlib==3.8.2 # 시각화 라이브러리
 seaborn==0.13.2 # 통계 시각화 라이브러리
 tqdm==4.66.2 # 진행률 표시줄
 
-# API Clients (API 클라이언트)
-google-generativeai==0.8.5 # Gemini API Python 클라이언트
-google-api-core==2.25.1
-google-api-python-client==2.177.0
-google-auth==2.40.3
-google-auth-httplib2==0.2.0
-googleapis-common-protos==1.70.0
-grpcio==1.74.0
-grpcio-status==1.71.2
-protobuf==5.29.5
-
 # 기타 (Others)
 click==8.1.7 # 커맨드라인 인터페이스 생성
 Pillow==9.4.0 # 이미지 처리

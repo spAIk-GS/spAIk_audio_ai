@@ -14,8 +14,6 @@ from audio_feedback.analyze_audio import analyze_audio_features
 from audio_feedback.stuttering_detector import detect_stuttering
 from audio_feedback.feedback_generator import generate_audio_feedback
 
-# Gemini 텍스트 피드백 생성 모듈 임포트 (가상 모듈)
-from answer_feedback.ai_feedback import generate_feedback_no_question
 
 # -- 서버 및 분석 관련 설정 --
 app = Flask(__name__)
@@ -71,13 +69,7 @@ def process_video_for_feedback(video_file_path: str, video_id: str) -> dict:
             except (ValueError, TypeError):
                 print("경고: 'avg_rms' 값을 float로 변환하는 데 실패했습니다.")
         
-        audio_feedback_results = generate_audio_feedback(features, avg_rms_db)
-        
-        # Gemini 모델을 사용하여 텍스트 답변 내용에 대한 피드백을 생성합니다.
-        if transcript.strip():
-            text_feedback = generate_feedback_no_question(transcript)
-        else:
-            text_feedback = "답변 텍스트가 없어 Gemini 피드백을 생성하지 않습니다."
+        audio_feedback_results = generate_audio_feedback(features, avg_rms_db) 
         
         # 최종 분석 결과를 JSON 형식에 맞춰 재구성합니다.
         final_feedback = {
@@ -100,7 +92,7 @@ def process_video_for_feedback(video_file_path: str, video_id: str) -> dict:
                     "feedback": stuttering_analysis_results.get('stuttering_feedback', 'N/A'),
                     "stutter_count": stuttering_analysis_results.get('stutter_count', 0)
                 },
-                "content_summary": text_feedback
+          
             }
         }
         return final_feedback
